@@ -2,6 +2,8 @@
 
 StatCraft-server est un interface web qui se lance en simultané d'un serveur Minecraft sur lequel le plugin StatCraft est installé. Il permet de faire un affichage dynamique des statistiques des joueurs en fonction de différents mode de jeu.
 
+[https://github.com/Loutreee/StatCraft}(## Statcraft)
+
 ### Tableau des étapes à venir pour l'interface et les graphiques
 
 | **Étape**                                  | **Description**                                                                                                                                           | **Statut**            | **Commentaires**                                                                                                  |
