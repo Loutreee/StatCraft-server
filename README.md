@@ -11,7 +11,7 @@ Lien vers le DockerHub : [StatCraft-Server DockerHub](https://hub.docker.com/r/l
 Je vous conseille d'utiliser l'image docker de [ITZG](https://hub.docker.com/r/itzg/minecraft-server) et d'incorporer dans le docker compose ceci :
 
 ```yml
-statcraft-server-prod:
+statcraft-server:
         image: loutreee/statcraft-server
         ports: 
             - 81:8501
