@@ -6,6 +6,19 @@ Lien vers le GitHub : [StatCraft](https://github.com/Loutreee/StatCraft)
 
 Lien vers le DockerHub : [StatCraft-Server DockerHub](https://hub.docker.com/r/loutreee/statcraft-server)
 
+## Docker Minecraft-server
+
+Je vous conseille d'utiliser l'image docker de [ITZG](https://hub.docker.com/r/itzg/minecraft-server) et d'incorporer dans le docker compose ceci :
+
+```yml
+statcraft-server-prod:
+        image: loutreee/statcraft-server
+        ports: 
+            - 81:8501
+        volumes:
+            - ./data:/app/data
+```
+
 ### Tableau des étapes à venir pour l'interface et les graphiques
 
 | **Étape**                                  | **Description**                                                                                                                                           | **Statut**            | **Commentaires**                                                                                                  |
