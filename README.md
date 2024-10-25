@@ -13,4 +13,5 @@ Lien vers le GitHub : [StatCraft](https://github.com/Loutreee/StatCraft)
 | **3. Dashboard Streamlit**                 | Créer une interface Streamlit pour afficher les statistiques des joueurs, incluant un tableau de bord avec des informations détaillées et la DynMap.        | 🟡 | Streamlit en parallèle du serveur Minecraft pour un accès en temps réel aux stats.                                |
 | **4. Intégration des statistiques en direct** | Envisager la récupération des statistiques en temps réel pendant le jeu, pour visualiser l'évolution des stats durant une session en cours.                 | 🔜 | Vérifier la faisabilité technique (accès aux stats via des API pendant le jeu).                                   |
 | **5. Comparaison Joueurs & Stats Personnalisées** | Permettre des comparaisons poussées entre joueurs et créer des onglets spécifiques dans Streamlit pour les stats les plus intéressantes.                    | 🔜 | Définir les stats à comparer (ex : minerais minés, monstres tués) et les afficher dans des onglets dédiés.         |
+
 ✅ Terminé 🟡 En cours 🔜 À venir
