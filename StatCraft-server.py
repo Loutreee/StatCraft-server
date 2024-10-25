@@ -26,9 +26,8 @@ if selected_session:
         player_path = os.path.join(session_path, selected_player)
         xml_files = sorted([f for f in os.listdir(player_path) if f.endswith(".xml")])
 
-        # Lire les fichiers XML et extraire les données de score et de date
-        scores = []
-        dates = []
+        # Initialisation des listes pour chaque statistique
+        dates, scores, blocks_mined, mobs_killed, items_crafted, play_time = [], [], [], [], [], []
 
         for xml_file in xml_files:
             file_path = os.path.join(player_path, xml_file)
@@ -39,23 +38,77 @@ if selected_session:
             date = xml_file.replace(".xml", "")
             dates.append(date)
             
-            # Extraire le score total
+            # Extraire les différentes statistiques
             score_total = int(root.find("scoreTotal").text)
+            total_blocks_mined = int(root.find("blocsMines/totalBlocsMines").text)
+            total_mobs_killed = int(root.find("mobsTues/totalMobsTues").text)
+            total_items_crafted = int(root.find("objetsCraftes/totalObjetsCraftes").text)
+            total_play_time = int(root.find("tempsDeJeu").text)
+            
+            # Ajouter les statistiques aux listes
             scores.append(score_total)
+            blocks_mined.append(total_blocks_mined)
+            mobs_killed.append(total_mobs_killed)
+            items_crafted.append(total_items_crafted)
+            play_time.append(total_play_time)
 
         # Créer un DataFrame pour organiser les données
-        df = pd.DataFrame({"Date": dates, "Score": scores})
+        df = pd.DataFrame({
+            "Date": dates,
+            "Score": scores,
+            "Total Blocs Minés": blocks_mined,
+            "Total Mobs Tués": mobs_killed,
+            "Total Objets Craftés": items_crafted,
+            "Temps de Jeu": play_time
+        })
         # Convertir les dates en format date/heure avec le format spécifié
         df["Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d_%H-%M-%S")
-        # Convertir en format date
         df = df.sort_values("Date")
 
-        # Afficher le graphique d'évolution du score
-        st.write(f"Évolution du score pour le joueur {selected_player}")
-        plt.figure(figsize=(10, 5))
-        plt.plot(df["Date"], df["Score"], marker="o")
-        plt.title(f"Évolution du score pour {selected_player}")
-        plt.xlabel("Date")
-        plt.ylabel("Score")
-        plt.grid(True)
-        st.pyplot(plt)
+        # Afficher les graphiques
+        st.write(f"Statistiques pour le joueur {selected_player}")
+
+        # Graphique pour le score
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df["Date"], df["Score"], marker="o", label="Score")
+        ax.set_title(f"Évolution du score pour {selected_player}")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Score")
+        ax.grid(True)
+        st.pyplot(fig)
+
+        # Graphique pour le total des blocs minés
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df["Date"], df["Total Blocs Minés"], marker="o", color="orange", label="Total Blocs Minés")
+        ax.set_title(f"Évolution des blocs minés pour {selected_player}")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Total Blocs Minés")
+        ax.grid(True)
+        st.pyplot(fig)
+
+        # Graphique pour le total des mobs tués
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df["Date"], df["Total Mobs Tués"], marker="o", color="red", label="Total Mobs Tués")
+        ax.set_title(f"Évolution des mobs tués pour {selected_player}")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Total Mobs Tués")
+        ax.grid(True)
+        st.pyplot(fig)
+
+        # Graphique pour le total des objets craftés
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df["Date"], df["Total Objets Craftés"], marker="o", color="green", label="Total Objets Craftés")
+        ax.set_title(f"Évolution des objets craftés pour {selected_player}")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Total Objets Craftés")
+        ax.grid(True)
+        st.pyplot(fig)
+
+        # Graphique pour le temps de jeu
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(df["Date"], df["Temps de Jeu"], marker="o", color="purple", label="Temps de Jeu")
+        ax.set_title(f"Évolution du temps de jeu pour {selected_player}")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Temps de Jeu (minutes)")
+        ax.grid(True)
+        st.pyplot(fig)
