@@ -1,6 +1,19 @@
 # StatCraft-server
 
-StatCraft-server est un interface web qui se lance en simultané d'un serveur Minecraft sur lequel le plugin StatCraft est installé. Il permet de faire un affichage dynamique des statistiques des joueurs en fonction de différents mode de jeu.
+## Description
+
+**StatCraft Server** est une application Streamlit permettant de visualiser en temps réel les statistiques des joueurs de Minecraft sur des serveur ayant installé Statcraft. Ce projet aide à analyser l'évolution des performances des joueurs en suivant des métriques telles que le score total, le nombre de blocs minés, les mobs tués, les objets craftés, et le temps de jeu.
+
+## Fonctionnalités
+
+- **Visualisation par Session** : Choisissez une session pour visualiser les performances des joueurs.
+- **Graphiques d'Évolution** :
+  - Score total
+  - Nombre de blocs minés
+  - Nombre de mobs tués
+  - Nombre d'objets craftés
+  - Temps de jeu
+- **Interface Interactive** : Utilisation de Streamlit pour une expérience utilisateur intuitive et interactive.
 
 Lien vers le GitHub : [StatCraft](https://github.com/Loutreee/StatCraft)
 
