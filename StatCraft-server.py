@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Chemins des données et fichier de configuration
 data_path = "./data/player_statistics"
-server_mode_file = "./data/server_mode"
+server_mode_file = "./data/plugins/StatCraft/server_info/server_mode.xml"
 
 # Déterminer le mode du serveur (Hardcore ou Survie)
 if os.path.exists(server_mode_file):
@@ -19,7 +19,7 @@ else:
 is_hardcore = server_mode.lower() == "hardcore"
 
 # Titre de l'application
-st.title("Statistiques des joueurs - Minecraft Hardcore test")
+st.title("Statistiques des joueurs - Minecraft")
 
 if is_hardcore:
     # Afficher un message pour le mode Hardcore
