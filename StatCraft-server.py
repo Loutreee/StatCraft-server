@@ -22,13 +22,11 @@ is_hardcore = server_mode.lower() == "hardcore"
 st.title("Statistiques des joueurs - Minecraft")
 
 if is_hardcore:
-    # Afficher un message pour le mode Hardcore
     st.subheader("Mode Hardcore activé")
     # Charger les sessions disponibles
     sessions = [f for f in os.listdir(data_path) if os.path.isdir(os.path.join(data_path, f))]
     selected_session = st.selectbox("Sélectionnez une session", sessions)
 else:
-    # Mode Survie : prendre la session par défaut
     st.subheader("Mode Survie activé")
     selected_session = "session0"
     session_path = os.path.join(data_path, selected_session)
@@ -39,15 +37,14 @@ else:
 # Chargement des joueurs dans la session sélectionnée
 session_path = os.path.join(data_path, selected_session)
 players = [f for f in os.listdir(session_path) if os.path.isdir(os.path.join(session_path, f))]
-
 selected_player = st.selectbox("Sélectionnez un joueur", players)
 
 if selected_player:
     player_path = os.path.join(session_path, selected_player)
     xml_files = sorted([f for f in os.listdir(player_path) if f.endswith(".xml")])
 
-    # Initialisation des listes pour chaque statistique
-    dates, scores, blocks_mined, mobs_killed, items_crafted, play_time = [], [], [], [], [], []
+    # Initialisation des listes pour chaque statistique de score
+    dates, global_scores, blocks_scores, mobs_scores, crafts_scores = [], [], [], [], []
 
     for xml_file in xml_files:
         file_path = os.path.join(player_path, xml_file)
@@ -58,77 +55,64 @@ if selected_player:
         date = xml_file.replace(".xml", "")
         dates.append(date)
 
-        # Extraire les différentes statistiques
+        # Extraire les scores à partir des balises <score>
         score_total = int(root.find("scoreTotal").text)
-        total_blocks_mined = int(root.find("blocsMines/totalBlocsMines").text)
-        total_mobs_killed = int(root.find("mobsTues/totalMobsTues").text)
-        total_items_crafted = int(root.find("objetsCraftes/totalObjetsCraftes").text)
-        total_play_time = int(root.find("tempsDeJeu").text)
+        blocks_score = int(root.find("blocsMines/score").text)
+        mobs_score = int(root.find("mobsTues/score").text)
+        crafts_score = int(root.find("objetsCraftes/score").text)
 
-        # Ajouter les statistiques aux listes
-        scores.append(score_total)
-        blocks_mined.append(total_blocks_mined)
-        mobs_killed.append(total_mobs_killed)
-        items_crafted.append(total_items_crafted)
-        play_time.append(total_play_time)
+        global_scores.append(score_total)
+        blocks_scores.append(blocks_score)
+        mobs_scores.append(mobs_score)
+        crafts_scores.append(crafts_score)
 
     # Créer un DataFrame pour organiser les données
     df = pd.DataFrame({
         "Date": dates,
-        "Score": scores,
-        "Total Blocs Minés": blocks_mined,
-        "Total Mobs Tués": mobs_killed,
-        "Total Objets Craftés": items_crafted,
-        "Temps de Jeu": play_time
+        "Score Global": global_scores,
+        "Score Blocs": blocks_scores,
+        "Score Mobs": mobs_scores,
+        "Score Crafts": crafts_scores
     })
-    # Convertir les dates en format date/heure avec le format spécifié
+
+    # Conversion de la colonne Date en datetime
     df["Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d_%H-%M-%S")
     df = df.sort_values("Date")
 
-    # Afficher les graphiques
-    st.write(f"Statistiques pour le joueur {selected_player}")
+    st.write(f"Statistiques de score pour le joueur **{selected_player}**")
 
-    # Graphique pour le score
+    # Graphique Score Global
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(df["Date"], df["Score"], marker="o", label="Score")
-    ax.set_title(f"Évolution du score pour {selected_player}")
+    ax.plot(df["Date"], df["Score Global"], label="Score Global")
+    ax.set_title(f"Évolution du Score Global pour {selected_player}")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Score")
+    ax.set_ylabel("Score Global")
     ax.grid(True)
     st.pyplot(fig)
 
-    # Graphique pour le total des blocs minés
+    # Graphique Score Blocs
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(df["Date"], df["Total Blocs Minés"], marker="o", color="orange", label="Total Blocs Minés")
-    ax.set_title(f"Évolution des blocs minés pour {selected_player}")
+    ax.plot(df["Date"], df["Score Blocs"], color="orange", label="Score Blocs")
+    ax.set_title(f"Évolution du Score Blocs pour {selected_player}")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Total Blocs Minés")
+    ax.set_ylabel("Score Blocs")
     ax.grid(True)
     st.pyplot(fig)
 
-    # Graphique pour le total des mobs tués
+    # Graphique Score Mobs
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(df["Date"], df["Total Mobs Tués"], marker="o", color="red", label="Total Mobs Tués")
-    ax.set_title(f"Évolution des mobs tués pour {selected_player}")
+    ax.plot(df["Date"], df["Score Mobs"], color="red", label="Score Mobs")
+    ax.set_title(f"Évolution du Score Mobs pour {selected_player}")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Total Mobs Tués")
+    ax.set_ylabel("Score Mobs")
     ax.grid(True)
     st.pyplot(fig)
 
-    # Graphique pour le total des objets craftés
+    # Graphique Score Crafts
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(df["Date"], df["Total Objets Craftés"], marker="o", color="green", label="Total Objets Craftés")
-    ax.set_title(f"Évolution des objets craftés pour {selected_player}")
+    ax.plot(df["Date"], df["Score Crafts"], color="green", label="Score Crafts")
+    ax.set_title(f"Évolution du Score Crafts pour {selected_player}")
     ax.set_xlabel("Date")
-    ax.set_ylabel("Total Objets Craftés")
-    ax.grid(True)
-    st.pyplot(fig)
-
-    # Graphique pour le temps de jeu
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(df["Date"], df["Temps de Jeu"], marker="o", color="purple", label="Temps de Jeu")
-    ax.set_title(f"Évolution du temps de jeu pour {selected_player}")
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Temps de Jeu (minutes)")
+    ax.set_ylabel("Score Crafts")
     ax.grid(True)
     st.pyplot(fig)
